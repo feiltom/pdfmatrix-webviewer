@@ -1,0 +1,8 @@
+node_modules/
+dist/
+src/generated/
+test-results/
+playwright-report/
+test/webpack/out/
+*.tgz
+.DS_Store

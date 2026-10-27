@@ -1,0 +1,14 @@
+/* Same rules as the host application's WebViewer stylesheet (loaded with the `css` option). */
+:host {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+}
+
+.is-ocr .ui-selectable-helper {
+    border: 1px solid rgb(255, 158, 0) !important;
+    background: rgba(255, 158, 0, .2);
+}

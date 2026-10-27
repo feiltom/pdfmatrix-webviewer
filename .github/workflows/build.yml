@@ -1,0 +1,66 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # Same podman image and Makefile targets as local development.
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure podman
+        run: command -v podman || (sudo apt-get update && sudo apt-get install -y podman)
+
+      - name: Image and dependencies
+        run: make install
+
+      - name: Build and test (Chromium, Firefox, WebKit; webpack host app)
+        run: make test-all
+
+      - name: Pack
+        run: |
+          make pack
+          ls -la *.tgz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: '*.tgz'
+          if-no-files-found: error
+
+      - name: GitHub release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version $version" >&2
+            exit 1
+          fi
+          gh release create "${GITHUB_REF_NAME}" --generate-notes *.tgz
+
+      - uses: actions/setup-node@v4
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: "@feiltom"
+
+      - name: Publish to GitHub Packages (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish *.tgz

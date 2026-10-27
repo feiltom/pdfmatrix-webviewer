@@ -1,0 +1,52 @@
+{
+  "name": "@feiltom/pdfmatrix-webviewer",
+  "version": "0.1.0",
+  "description": "Open-source, drop-in replacement for the subset of @pdftron/webviewer used in browser apps, built on pdf.js",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/webviewer.cjs",
+  "module": "./dist/webviewer.js",
+  "types": "./dist/webviewer.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/webviewer.d.ts",
+      "import": "./dist/webviewer.js",
+      "require": "./dist/webviewer.cjs",
+      "default": "./dist/webviewer.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "public",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "fixtures": "node test/make-fixtures.mjs",
+    "test": "playwright test",
+    "test:webpack": "node test/webpack/build.mjs && playwright test -c test/webpack/playwright.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feiltom/pdfmatrix-webviewer.git"
+  },
+  "homepage": "https://github.com/feiltom/pdfmatrix-webviewer#readme",
+  "bugs": {
+    "url": "https://github.com/feiltom/pdfmatrix-webviewer/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "copy-webpack-plugin": "14.0.0",
+    "esbuild": "0.28.2",
+    "pdfjs-dist": "6.4.299",
+    "terser-webpack-plugin": "5.6.1",
+    "webpack": "5.111.1",
+    "webpack-cli": "7.2.2"
+  }
+}

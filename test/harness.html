@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>pdfmatrix-webviewer harness</title>
+    <style>
+        html, body { margin: 0; height: 100%; }
+        #viewer { position: relative; width: 900px; height: 800px; display: flex; }
+    </style>
+</head>
+<body>
+    <div id="viewer"></div>
+    <script type="module">
+        import WebViewer from '/dist/webviewer.js';
+        window.WebViewer = WebViewer;
+        window.harnessReady = true;
+    </script>
+</body>
+</html>
