@@ -2,9 +2,9 @@ import { assetTable, workerUrl } from './generated/assets.js';
 
 /**
  * Lazy pdf.js loader. pdf.js and its worker, CMaps, standard fonts and wasm decoders ship in
- * `dist/pdfjs/` and are addressed with `new URL(..., import.meta.url)`, so bundlers (webpack 5,
- * Vite, esbuild) emit them next to the app without any copy step, and the viewer never depends
- * on the `path` option.
+ * `dist/assets/webviewer/pdfjs/` and are addressed with `new URL(..., import.meta.url)`, so
+ * bundlers (webpack 5, Vite, esbuild) emit them next to the app without any copy step, and the
+ * viewer never depends on the `path` option.
  */
 
 let pdfjsPromise = null;
@@ -19,7 +19,7 @@ const assets = () => {
 
 export const loadPdfjs = () => {
     if (!pdfjsPromise) {
-        pdfjsPromise = import('./pdfjs/pdf.min.mjs').then((lib) => {
+        pdfjsPromise = import('./assets/webviewer/pdfjs/pdf.min.mjs').then((lib) => {
             lib.GlobalWorkerOptions.workerSrc = workerUrl();
             return lib;
         });

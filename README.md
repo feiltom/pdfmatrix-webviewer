@@ -34,15 +34,16 @@ await documentViewer.loadDocument(url, { customHeaders, withCredentials: true, o
 
 ### Assets
 
-pdf.js, its worker, CMaps, standard fonts and wasm image decoders ship in `dist/pdfjs/` and are
+pdf.js, its worker, CMaps, standard fonts and wasm image decoders ship in `dist/assets/webviewer/pdfjs/` and are
 referenced with `new URL(..., import.meta.url)`. Bundlers such as webpack 5, Vite or esbuild emit
 them with the application, so the WebViewer `path` option is ignored and nothing has to be copied.
 The package still contains a `public/` folder because build configurations written for WebViewer
 copy `node_modules/@pdftron/webviewer/public`.
 
 These files add about 4 MB to the build output, mostly CMaps that are only fetched for documents
-that need them. If a service worker precaches the whole build (Workbox `InjectManifest`), exclude
-`pdfjs/cmaps/` and `pdfjs/standard_fonts/` from the precache manifest.
+that need them. Their emitted paths contain `assets/webviewer/`, so the rules applications already
+have for WebViewer assets (long cache headers, exclusion from a Workbox precache manifest) keep
+applying.
 
 ## Supported API
 
@@ -131,5 +132,5 @@ make pack          # npm pack
 
 ## License
 
-Apache-2.0. pdf.js and its bundled resources are Apache-2.0 (see `dist/pdfjs/LICENSE`, and the
+Apache-2.0. pdf.js and its bundled resources are Apache-2.0 (see `dist/assets/webviewer/pdfjs/LICENSE`, and the
 license files next to the fonts and wasm decoders).
